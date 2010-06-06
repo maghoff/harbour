@@ -8,6 +8,8 @@
 #include "boat.hpp"
 #include "route.hpp"
 
+class QPen;
+class QBrush;
 class QPaintEvent;
 class QTabletEvent;
 class QTimer;
@@ -23,6 +25,10 @@ class Game : public QWidget {
     QMap<id_t, QPoint> penPositions;
 
     QList<Boat> boats;
+
+    QPen* routePen;
+    QPen* boatPen;
+    QBrush* boatBrush;
 
     Boat* findBoat(QPointF pos);
 

@@ -9,8 +9,13 @@ Game::Game(QWidget *parent) :
     QWidget(parent),
     timer(new QTimer(this))
 {
+    routePen =  new QPen  (QColor::fromHslF(0.1, 0.7, 0.4, 0.6));
+    boatPen =   new QPen  (QColor::fromHslF(0.4, 0.5, 0.5));
+    boatBrush = new QBrush(QColor::fromHslF(0.4, 0.7, 0.5));
+
     boats.append(Boat(QPointF(50, 100), QPointF(0, -1)));
-    boats.append(Boat(QPointF(150, 100), QPointF(1, 0)));
+    for (int i = 70; i < 300; i+=25)
+        boats.append(Boat(QPointF(i, 100), QPointF(1, 0)));
 
     connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
 
@@ -107,6 +112,8 @@ void Game::drawRoute(QPainter& painter, const Route& route) {
         path.lineTo(pt);
     }
 
+    painter.setPen(*routePen);
+    painter.setBrush(QBrush());
     painter.drawPath(path);
 }
 
@@ -134,8 +141,13 @@ void Game::paintEvent(QPaintEvent *) {
         path.lineTo(pos - 10*dir + 5*odir);
         path.closeSubpath();
 
+        painter.setPen(*boatPen);
+        painter.setBrush(*boatBrush);
         painter.drawPath(path);
+    }
 
+    foreach (const Boat& boat, boats) {
         drawRoute(painter, boat.getRoute());
     }
+
 }
