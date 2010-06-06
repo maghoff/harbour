@@ -6,12 +6,17 @@
 
 class Boat {
     Route route;
+    QPointF dir;
 
 public:
     Boat(QPointF pos, QPointF dir);
     ~Boat();
 
     void tick();
+
+    QPointF getPos() const;
+    QPointF getDir() const;
+    Route getRoute() const;
 };
 
 #endif // BOAT_HPP

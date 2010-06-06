@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QPoint>
 #include <QMap>
+#include <QList>
+#include "boat.hpp"
 #include "route.hpp"
 
 class QPaintEvent;
@@ -16,6 +18,8 @@ class Game : public QWidget {
 
     QMap<id_t, Route> routes;
     QMap<id_t, QPoint> penPositions;
+
+    QList<Boat> boats;
 
 public:
     explicit Game(QWidget *parent = 0);

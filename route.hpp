@@ -7,11 +7,12 @@
 class Route {
     QList<QPointF> path;
 
-    QPointF head() const;
-
 public:
     Route(QPointF start);
     ~Route();
+
+    QPointF head() const;
+    QPointF tail() const;
 
     void goThrough(QPointF);
 

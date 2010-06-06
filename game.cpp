@@ -6,6 +6,7 @@
 Game::Game(QWidget *parent) :
     QWidget(parent)
 {
+    boats.append(Boat(QPointF(50, 100), QPointF(0, -1)));
 }
 
 void Game::tabletEvent(QTabletEvent *event) {
@@ -71,6 +72,19 @@ void Game::paintEvent(QPaintEvent *event) {
         path.lineTo(pt - QPoint(0, +5));
         path.moveTo(pt - QPoint(-5, 0));
         path.lineTo(pt - QPoint(+5, 0));
+
+        painter.drawPath(path);
+    }
+
+    foreach (const Boat& boat, boats) {
+        QPointF pos = boat.getPos(), dir = boat.getDir(), odir(dir.y(), -dir.x());
+
+        QPainterPath path;
+        path.moveTo(pos - 10*dir - 5*odir);
+        path.lineTo(pos + 10*dir - 5*odir);
+        path.lineTo(pos + 10*dir + 5*odir);
+        path.lineTo(pos - 10*dir + 5*odir);
+        path.closeSubpath();
 
         painter.drawPath(path);
     }

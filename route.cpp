@@ -24,6 +24,10 @@ QPointF Route::head() const {
     return path.back();
 }
 
+QPointF Route::tail() const {
+    return path.front();
+}
+
 void Route::goThrough(QPointF p) {
     if (pyth(p - head()) > 5.) {
         path.append(p);
