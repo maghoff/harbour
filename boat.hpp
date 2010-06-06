@@ -17,6 +17,8 @@ public:
     QPointF getPos() const;
     QPointF getDir() const;
     Route getRoute() const;
+
+    Route* getRoutePointer();
 };
 
 #endif // BOAT_HPP

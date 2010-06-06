@@ -9,9 +9,11 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     game.cpp \
     route.cpp \
-    boat.cpp
+    boat.cpp \
+    util.cpp
 HEADERS += mainwindow.h \
     game.hpp \
     route.hpp \
-    boat.hpp
+    boat.hpp \
+    util.hpp
 FORMS += mainwindow.ui

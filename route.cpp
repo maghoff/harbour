@@ -1,16 +1,5 @@
-#include <cmath>
 #include "route.hpp"
-
-namespace {
-
-template <typename T>
-T sqr(T x) { return x*x; }
-
-double pyth(QPointF p) {
-    return sqrt(sqr(p.x()) + sqr(p.y()));
-}
-
-}
+#include "util.hpp"
 
 Route::Route(QPointF start) {
     path.append(start);
@@ -29,7 +18,7 @@ QPointF Route::tail() const {
 }
 
 void Route::goThrough(QPointF p) {
-    if (pyth(p - head()) > 5.) {
+    if (util::pyth(p - head()) > 5.) {
         path.append(p);
     }
 }

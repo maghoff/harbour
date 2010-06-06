@@ -16,10 +16,14 @@ class Game : public QWidget {
 
     typedef qint64 id_t;
 
-    QMap<id_t, Route> routes;
+    QMap<id_t, Route*> routes;
     QMap<id_t, QPoint> penPositions;
 
     QList<Boat> boats;
+
+    Boat* findBoat(QPointF pos);
+
+    void drawRoute(QPainter& painter, const Route& route);
 
 public:
     explicit Game(QWidget *parent = 0);

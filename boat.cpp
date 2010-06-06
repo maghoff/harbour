@@ -23,3 +23,7 @@ QPointF Boat::getDir() const {
 Route Boat::getRoute() const {
     return route;
 }
+
+Route* Boat::getRoutePointer() {
+    return &route;
+}
