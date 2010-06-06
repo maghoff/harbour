@@ -1,0 +1,7 @@
+syntax: glob
+*.o
+*~
+wacom.app
+Makefile
+moc_*
+ui_*
