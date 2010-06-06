@@ -5,3 +5,4 @@ wacom.app
 Makefile
 moc_*
 ui_*
+*.user
