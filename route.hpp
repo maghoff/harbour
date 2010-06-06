@@ -6,13 +6,20 @@
 
 class Route {
     QList<QPointF> path;
+    QPointF taildir;
+
+    void invalidateTailDir();
 
 public:
-    Route(QPointF start);
+    Route(QPointF start, QPointF dir);
     ~Route();
 
     QPointF head() const;
     QPointF tail() const;
+    QPointF& tail();
+    QPointF getTailDir() const;
+
+    double consume(double len);
 
     void goThrough(QPointF);
 

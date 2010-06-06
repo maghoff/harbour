@@ -1,14 +1,33 @@
 #include <cassert>
 #include <QPaintEvent>
 #include <QPainter>
+#include <QTimer>
 #include "game.hpp"
 #include "util.hpp"
 
 Game::Game(QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent),
+    timer(new QTimer(this))
 {
     boats.append(Boat(QPointF(50, 100), QPointF(0, -1)));
     boats.append(Boat(QPointF(150, 100), QPointF(1, 0)));
+
+    connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
+
+    timer->setSingleShot(false);
+    timer->start(10);
+}
+
+Game::~Game() {
+
+}
+
+void Game::tick() {
+    for (QList<Boat>::iterator i = boats.begin(); i != boats.end(); ++i) {
+        Boat& boat = *i;
+        boat.tick();
+    }
+    update();
 }
 
 Boat* Game::findBoat(QPointF pos) {
@@ -42,7 +61,7 @@ void Game::tabletEvent(QTabletEvent *event) {
             Route* route = boat->getRoutePointer();
 
             routes.insert(event->uniqueId(), route);
-            *route = Route(boat->getPos());
+            *route = Route(boat->getPos(), boat->getDir());
         }
 
         break;
@@ -110,6 +129,7 @@ void Game::paintEvent(QPaintEvent *) {
         QPainterPath path;
         path.moveTo(pos - 10*dir - 5*odir);
         path.lineTo(pos + 10*dir - 5*odir);
+        path.lineTo(pos + 15*dir - 0*odir);
         path.lineTo(pos + 10*dir + 5*odir);
         path.lineTo(pos - 10*dir + 5*odir);
         path.closeSubpath();

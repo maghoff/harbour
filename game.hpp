@@ -10,11 +10,14 @@
 
 class QPaintEvent;
 class QTabletEvent;
+class QTimer;
 
 class Game : public QWidget {
     Q_OBJECT
 
     typedef qint64 id_t;
+
+    QTimer* timer;
 
     QMap<id_t, Route*> routes;
     QMap<id_t, QPoint> penPositions;
@@ -27,6 +30,7 @@ class Game : public QWidget {
 
 public:
     explicit Game(QWidget *parent = 0);
+    ~Game();
 
 protected:
     void tabletEvent(QTabletEvent *event);
@@ -36,6 +40,8 @@ signals:
 
 public slots:
 
+private slots:
+    void tick();
 };
 
 #endif // GAME_HPP
