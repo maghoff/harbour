@@ -9,13 +9,17 @@ Game::Game(QWidget *parent) :
     QWidget(parent),
     timer(new QTimer(this))
 {
-    routePen =  new QPen  (QColor::fromHslF(0.1, 0.7, 0.4, 0.6));
-    boatPen =   new QPen  (QColor::fromHslF(0.4, 0.5, 0.5));
-    boatBrush = new QBrush(QColor::fromHslF(0.4, 0.7, 0.5));
+    routePen =        new QPen  (QColor::fromHslF(0.1, 0.7, 0.4, 0.6));
+    routeInPortPen =  new QPen  (QColor::fromHslF(0.6, 0.7, 0.4, 0.6));
+    boatPen =         new QPen  (QColor::fromHslF(0.4, 0.5, 0.5));
+    boatBrush =       new QBrush(QColor::fromHslF(0.4, 0.7, 0.5));
 
     boats.append(Boat(QPointF(50, 100), QPointF(0, -1)));
     for (int i = 70; i < 300; i+=25)
         boats.append(Boat(QPointF(i, 100), QPointF(1, 0)));
+
+    ports.append(Port(QPoint(100,100), QPoint(50, 0)));
+    ports.append(Port(QPoint(200,200), QPoint(40, 10)));
 
     connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
 
@@ -44,7 +48,7 @@ Boat* Game::findBoat(QPointF pos) {
     for (QList<Boat>::iterator i = boats.begin(); i != boats.end(); ++i) {
         Boat& boat = *i;
 
-        qreal dist = util::pyth(pos - boat.getPos());
+        qreal dist = util::length(pos - boat.getPos());
         if (dist < candidateDistance) {
             candidate = &boat;
             candidateDistance = dist;
@@ -103,6 +107,14 @@ void Game::tabletEvent(QTabletEvent *event) {
     update();
 }
 
+bool Game::isPointInPort(QPointF pt) const {
+    foreach (const Port& port, ports) {
+        if (port.containsPoint(pt))
+            return true;
+    }
+    return false;
+}
+
 void Game::drawRoute(QPainter& painter, const Route& route) {
     QList<QPointF> points = route.getPath();
 
@@ -112,23 +124,16 @@ void Game::drawRoute(QPainter& painter, const Route& route) {
         path.lineTo(pt);
     }
 
-    painter.setPen(*routePen);
+    if (isPointInPort(route.head()))
+        painter.setPen(*routeInPortPen);
+    else
+        painter.setPen(*routePen);
     painter.setBrush(QBrush());
     painter.drawPath(path);
 }
 
 void Game::paintEvent(QPaintEvent *) {
     QPainter painter(this);
-
-    foreach (const QPoint& pt, penPositions) {
-        QPainterPath path;
-        path.moveTo(pt - QPoint(0, -5));
-        path.lineTo(pt - QPoint(0, +5));
-        path.moveTo(pt - QPoint(-5, 0));
-        path.lineTo(pt - QPoint(+5, 0));
-
-        painter.drawPath(path);
-    }
 
     foreach (const Boat& boat, boats) {
         QPointF pos = boat.getPos(), dir = boat.getDir(), odir(dir.y(), -dir.x());
@@ -148,6 +153,31 @@ void Game::paintEvent(QPaintEvent *) {
 
     foreach (const Boat& boat, boats) {
         drawRoute(painter, boat.getRoute());
+    }
+
+    foreach (const Port& port, ports) {
+        QPainterPath path;
+        QPointF rightside(-port.leftside.y(), port.leftside.x());
+        path.moveTo(port.corner);
+        path.lineTo(port.corner + port.leftside);
+        path.lineTo(port.corner + port.leftside + rightside);
+        path.lineTo(port.corner + rightside);
+        path.closeSubpath();
+
+        painter.setPen(*boatPen);
+        painter.setBrush(QBrush());
+        painter.drawPath(path);
+    }
+
+    painter.setPen(QPen());
+    foreach (const QPoint& pt, penPositions) {
+        QPainterPath path;
+        path.moveTo(pt - QPoint(0, -5));
+        path.lineTo(pt - QPoint(0, +5));
+        path.moveTo(pt - QPoint(-5, 0));
+        path.lineTo(pt - QPoint(+5, 0));
+
+        painter.drawPath(path);
     }
 
 }

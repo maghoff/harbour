@@ -3,13 +3,21 @@
 
 namespace util {
 
-double pyth(QPointF p) {
-    return sqrt(sqr(p.x()) + sqr(p.y()));
+double sqlength(QPointF p) {
+    return sqr(p.x()) + sqr(p.y());
+}
+
+double length(QPointF p) {
+    return sqrt(sqlength(p));
 }
 
 QPointF normalize(QPointF p)
 {
-    return p / pyth(p);
+    return p / length(p);
+}
+
+double dotProduct(QPointF a, QPointF b) {
+    return a.x() * b.x() + a.y() * b.y();
 }
 
 }

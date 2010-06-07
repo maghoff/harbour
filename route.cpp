@@ -42,7 +42,7 @@ double Route::consume(double len) {
     it++;
     if (it != path.end()) {
         QPointF firstLine = *it - path.front();
-        double lineLength = util::pyth(firstLine);
+        double lineLength = util::length(firstLine);
         if (len > lineLength) {
             // We want to consume more than the first segment
             path.pop_front();
@@ -58,7 +58,7 @@ double Route::consume(double len) {
 }
 
 void Route::goThrough(QPointF p) {
-    if (util::pyth(p - head()) > 5.) {
+    if (util::length(p - head()) > 5.) {
         path.append(p);
     }
     invalidateTailDir();

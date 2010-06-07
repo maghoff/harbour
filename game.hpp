@@ -7,6 +7,7 @@
 #include <QList>
 #include "boat.hpp"
 #include "route.hpp"
+#include "port.hpp"
 
 class QPen;
 class QBrush;
@@ -25,14 +26,17 @@ class Game : public QWidget {
     QMap<id_t, QPoint> penPositions;
 
     QList<Boat> boats;
+    QList<Port> ports;
 
     QPen* routePen;
+    QPen* routeInPortPen;
     QPen* boatPen;
     QBrush* boatBrush;
 
     Boat* findBoat(QPointF pos);
 
     void drawRoute(QPainter& painter, const Route& route);
+    bool isPointInPort(QPointF pt) const;
 
 public:
     explicit Game(QWidget *parent = 0);
